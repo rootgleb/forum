@@ -7,5 +7,6 @@ from .models import Post
 
 
 def index(request):
-    posts = Post.objects.order_by('date')
+    posts = reversed(Post.objects.order_by('date'))
+    print(posts)
     return render(request, "main_app/index.html", {"posts": posts})

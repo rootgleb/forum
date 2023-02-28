@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'main_app/css/main.css' %}">
+    <meta charset="UTF-8">
+    <title>Undercover - форум</title>
+
+</head>
+<body>
+{% include "main_app/header.html" %}
+
+{% for post in posts %}
+<div class="post_card">
+    <a href="topic/{{ post.url }}"><h1 align="left" class="post_field">{{ post.title }}</h1></a>
+<h2 align="left" class="post_field">Автор: {{ post.author }}</h2>
+</div>
+{% endfor %}
+</body>
+<style>
+h1{color:white}
+h2{color:white}
+h3{color:white}
+.post_card{
+background-color: #1b1c1d;
+padding: 10px;
+display: flex;
+height: 60px;
+flex-direction: column;
+border-radius: 10px;
+margin-top: 10px;
+margin-left: 12px;
+margin-right: 12px;
+}
+.post_field{
+line-height: 10px;
+}
+</style>
+</html>

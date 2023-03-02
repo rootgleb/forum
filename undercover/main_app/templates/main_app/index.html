@@ -12,7 +12,7 @@
 
 {% for post in posts %}
 <div class="post_card">
-    <a href="topic/{{ post.url }}"><h1 align="left" class="post_field">{{ post.title }}</h1></a>
+    <a href="{% url 'topic' pk=post.pk %}"><h1 align="left" class="post_field">{{ post.title }}</h1></a>
 <h2 align="left" class="post_field">Автор: {{ post.author }}</h2>
 </div>
 {% endfor %}

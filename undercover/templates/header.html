@@ -1,0 +1,31 @@
+<header>
+<div class="ui inverted segment">
+  <form action="/"><button class="ui inverted orange basic button">Главная</button></form>
+  <button class="ui inverted yellow basic button">Создать тему</button>
+  <button class="ui inverted teal basic button">Открыть раздел</button>
+  <button class="ui inverted violet basic button">Правила форума</button>
+  <button class="ui inverted blue basic button">Прочее</button>
+  {% if user.is_authenticated %}
+  <button class="ui inverted green basic button">{{ user.get_username }}</button>
+  {% endif %}
+  {% if not user.is_authenticated %}
+  <form action="register"><button class="ui inverted green basic button">Войти</button></form>
+  {% endif %}
+</div>
+</header>
+<style>
+
+div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form{
+    border:0;
+    margin:0;
+    padding:0;
+}
+
+{% include "main_app/styles.html" %}
+</style>

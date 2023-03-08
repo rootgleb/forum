@@ -1,9 +1,25 @@
 {% include 'header.html' %}
 {% block content %}
-  <h2>Add Post</h2>
+{% if user.is_authenticated %}
+
+<h2>Создать запись:</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+    <div id="create_post">
+      <div align="left">{{ form.title }}</div>
+      <div align="left">{{ form.body }}</div>
+      <button type="submit">Опубликовать</button>
+    </div>
   </form>
+<style>
+  #create_post{
+display: flex;
+flex-direction: column;
+}
+</style>
+  {% endif %}
+  {% if not user.is_authenticated %}
+<h1 style="color:white">Вам нужно сначала войти/зарегистрироваться чтобы создать пост.</h1>
+  {% endif %}
+
 {% endblock %}

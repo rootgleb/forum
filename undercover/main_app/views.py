@@ -4,11 +4,15 @@ from django.views import generic
 from .forms import PostForm
 from .models import Post
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 
 def index(request):
-    posts = reversed(Post.objects.order_by('date'))
-    return render(request, "main_app/index.html", {"posts": posts})
+    posts = Post.objects.order_by('date')[::-1]
+    paginator = Paginator(posts, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'main_app/index.html', {'page_obj': page_obj, "posts": posts})
 
 
 def topic(request, pk):
@@ -32,4 +36,3 @@ def add_post(request):
     else:
         form = PostForm()
     return render(request, 'post_form.html', {'form': form})
-

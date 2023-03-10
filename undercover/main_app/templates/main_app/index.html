@@ -10,12 +10,30 @@
 
 {% include "header.html" %}
 
-{% for post in posts %}
+{% for post in page_obj %}
 <div class="post_card">
     <a href="{% url 'topic' pk=post.pk %}"><h1 align="left" class="post_field">{{ post.title }}</h1></a>
 <h2 align="left" class="post_field">Автор: {{ post.author }}</h2>
 </div>
 {% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1"><button>В начало</button></a>
+        <a href="?page={{ page_obj.previous_page_number }}"><button>Назад</button></a>
+        {% endif %}
+
+
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"><button>Вперед</button></a>
+        <a href="?page={{ page_obj.paginator.num_pages }}"><button>В конец</button></a>
+        {% endif %}
+    </span>
+</div>
+        <span class="current" style="color:white">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
 </body>
 <style>
 h1{color:white}

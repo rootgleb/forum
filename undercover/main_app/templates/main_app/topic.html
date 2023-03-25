@@ -10,11 +10,50 @@
         {% endif %}
         <div class="topic">
         <h1>{{ post.title }}</h1>
-        <p>{{ post.body|linebreaksbr }}</p></div>
+        <h2>{{ post.body|linebreaksbr }}</h2></div>
     </div>
 {% endblock %}
 
+
+{% with comments.count as total_comments %}
+    <h2>
+        {% if total_comments != 0 %}
+            {{ total_comments }} комментариев
+            {% for comment in comments %}
+                <div class="comment">
+                    <p class="info">
+                        {{ comment.author }}: {{ comment.text }}
+                    </p>
+                </div>
+                {% empty %}
+            {% endfor %}
+        {% endif %}
+
+        {% if total_comments == 0 %}
+            <p>Комментариев пока нет.</p>
+        {% endif %}
+{% endwith %}</h2>
+
+
+{% if new_comment %}
+    <h2>Ваш комментарий был добавлен.</h2>
+{% endif %}
+
+{% if user.is_authenticated %}
+    <h2>Добавить комментарий:</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <p><button class="ui inverted blue basic button" type="submit">Опубликовать</button></p>
+    </form>
+{% endif %}
+
+{% if not user.is_authenticated %}
+    <p>Вы должны зарегистрироваться или войти чтобы оставлять комментарии.</p>
+{% endif %}
+
 <style>
+h2{color:white}
     .topic{
     flex-direction: column;}
     h1{color:white}

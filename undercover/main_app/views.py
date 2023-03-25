@@ -21,15 +21,11 @@ def topic(request, pk):
     comments = post.comments.all()
 
     if request.method == 'POST':
-        # A comment was posted
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
-            # Create Comment object but don't save to database yet
             new_comment = comment_form.save(commit=False)
-            # Assign the current post to the comment
             new_comment.post = post
             new_comment.author = request.user
-            # Save the comment to the database
             new_comment.save()
             return redirect('topic', pk=post.pk)
     else:

@@ -2,9 +2,30 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from .forms import PostForm, CommentForm
-from .models import Post
+from .models import Post, Category
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+
+def category_page(request):
+    categories = Category.objects.filter(parent=None)
+
+    def get_children(category):
+        children = category.children.all()
+        if children:
+            for child in children:
+                child.children.set(get_children(child))
+        return children
+
+    for category in categories:
+        category.children.set(get_children(category))
+
+    return render(request, "main_app/category.html", {'categories': categories})
+
+
+def category_posts(request, category_id):
+    category = Category.objects.get(id=category_id)
+    posts = Post.objects.filter(category=category)
+    return render(request, 'category_posts.html', {'category': category, 'posts': posts})
 
 
 def index(request):
@@ -53,4 +74,20 @@ def add_post(request):
         form = PostForm()
     return render(request, 'post_form.html', {'form': form})
 
+def category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    posts = Post.objects.filter(category__in=category.get_descendants(include_self=True))
+    paginator = Paginator(posts, 25)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'main_app/index.html', {'page_obj': page_obj, "posts": posts})
 
+def category_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    posts = Post.objects.filter(category__in=category.get_descendants(include_self=True))
+
+    context = {
+        'category': category,
+        'posts': posts,
+    }
+    return render(request, 'category.html', context)

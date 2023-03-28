@@ -1,0 +1,10 @@
+{% if categories %}
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'category' category.pk %}">{{ category.name }}</a>
+                {% include 'main_app/subcategory_list.html' with categories=category.children.all %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

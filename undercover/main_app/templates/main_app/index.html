@@ -1,4 +1,6 @@
 {% load static %}
+{% load mptt_tags %}
+
 <html lang="en">
 <head>
     <link rel="stylesheet" href="{% static 'main_app/css/main.css' %}">
@@ -14,6 +16,16 @@
 <div class="post_card">
     <a href="{% url 'topic' pk=post.pk %}"><h1 align="left" class="post_field">{{ post.title }}</h1></a>
 <h2 align="left" class="post_field">Автор: {{ post.author }}</h2>
+<h2 align="left" class="post_field">
+     {% if post.category.parent %}
+      {% with ancestors=post.category.get_ancestors %}
+        {% for ancestor in ancestors %}
+          {{ ancestor.name }} >
+        {% endfor %}
+      {% endwith %}
+    {% endif %}
+    {{ post.category.name }}
+</h2>
 </div>
 {% endfor %}
 <div class="pagination">
@@ -43,7 +55,7 @@ h3{color:white}
 background-color: #1b1c1d;
 padding: 10px;
 display: flex;
-height: 60px;
+height: 120px;
 flex-direction: column;
 border-radius: 10px;
 margin-top: 10px;
@@ -52,6 +64,7 @@ margin-right: 12px;
 }
 .post_field{
 line-height: 10px;
+
 }
 </style>
 </html>

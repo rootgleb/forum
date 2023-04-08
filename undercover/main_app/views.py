@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib import messages
 from .forms import PostForm, CommentForm
 from .models import Post, Category
 from django.contrib.auth.models import User
@@ -91,3 +92,6 @@ def category_view(request, category_id):
         'posts': posts,
     }
     return render(request, 'category.html', context)
+
+
+

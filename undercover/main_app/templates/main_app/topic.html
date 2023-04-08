@@ -8,11 +8,12 @@
                 {{ post.published_date }}
             </div>
         {% endif %}
-        <div class="topic">
+        <div class="topic" style="color: white;">
         <h1>{{ post.title }}</h1>
-        <h2>{{ post.body|linebreaksbr }}</h2></div>
+        <h2>{{ post.body|safe }}</h2></div>
     </div>
 {% endblock %}
+
 
 
 {% with comments.count as total_comments %}

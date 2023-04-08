@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
-from django.urls import reverse
+from django.contrib.auth.signals import user_logged_in
+from ckeditor.widgets import CKEditorWidget
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class Category(MPTTModel):
     name = models.CharField(max_length=255)
@@ -34,4 +38,22 @@ class Comments(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор комментария", blank=True, null=True)
     create_date = models.DateTimeField(auto_now=True)
     text = models.TextField(verbose_name="Текст комментария", max_length=2000)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    reputation = models.IntegerField(default=0)
+    profile_image = models.ImageField()
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 

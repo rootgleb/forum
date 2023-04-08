@@ -8,5 +8,6 @@ urlpatterns = [
     path('add_post/', views.add_post, name="add"),
     path('categories/', views.category_page, name="categories"),
     path('categories/<int:category_id>/', views.category_posts, name="category_posts"),
-    path('category/<int:pk>/', views.category, name='category')
+    path('category/<int:pk>/', views.category, name='category'),
+
 ]

@@ -6,12 +6,14 @@
   <form method="post">
     {% csrf_token %}
     <div id="create_post">
-      <div align="left"><h2>Введите заголовок поста:</h2>{{ form.title }}</div>
-      <div align="left"><h2>Введите текст поста:</h2>{{ form.body }}</div>
+      <div align="left">{{ form.title }}</div>
+      <div align="left">{{ form.body }}</div>
       <div align="left"><h2>Введите категорию поста:</h2>{{ form.category }}</div>
+      {{ form.media }}
       <button type="submit">Опубликовать</button>
     </div>
   </form>
+
 <style>
   #create_post{
 display: flex;

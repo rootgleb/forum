@@ -1,0 +1,38 @@
+{% include 'header.html'  %}
+
+{% block content %}
+  <form method="POST">
+    {% csrf_token %}
+    <div id="div">
+      <h2>Время бана (в днях): </h2>
+      {{ form.days }}
+      <h2>Причина бана:</h2>
+      {{ form.reason }}
+      <button type="submit" class="red-button">Заблокировать</button>
+    </div>
+  </form>
+{% endblock %}
+<style>
+label {
+  color: white;
+}
+.red-button {
+  background-color: #bd2c00;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+  margin-top: 10px;
+}
+
+.red-button:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+h2{color:white}
+#div{
+display: flex;
+flex-direction: column;
+align-items: flex-start;}
+</style>

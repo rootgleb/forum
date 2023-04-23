@@ -11,7 +11,7 @@
         <div class="topic" style="color: white;">
         <h1>{{ post.title }}</h1>
         <h2>{{ post.body|safe }}</h2>
-        <h4>Автор: <a href="{% url 'profile' user.id %}">{{ post.author }}</a></h4></div>
+        <h4>Автор: <a href="{% url 'profile' post.author.id %}">{{ post.author }}</a></h4></div>
     </div>
 {% endblock %}
 
@@ -24,7 +24,7 @@
             <div class="comments">
                 {% for comment in comments %}
                     <div class="comment">
-                        <p><a href="{% url 'profile' user.id %}">{{ comment.author }}</a>: {{ comment.text }}</p>
+                        <p><a href="{% url 'profile' comment.author.id %}">{{ comment.author }}</a>: {{ comment.text }}</p>
                     </div>
                 {% endfor %}
             </div>

@@ -26,3 +26,8 @@ class CommentForm(forms.ModelForm):
 
 
 
+class BanForm(forms.Form):
+    days = forms.IntegerField(min_value=1, label='')
+    reason = forms.CharField(max_length=500, label='', widget=forms.Textarea(attrs={'rows': 4}))
+
+

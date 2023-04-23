@@ -1,7 +1,82 @@
 {% include 'header.html'  %}
-<h1>Логин: {{ profile.username }}</h1>
-<h1>О юзере: {{ profile.profile.bio }}</h1>
-<h1>Репутация: {{ profile.profile.reputation }}</h1>
+<div class="user-info">
+<h2>Логин: {{ profile.username }}</h2>
+<h2>О юзере: {{ profile.profile.bio }}</h2>
+<h2>Репутация: {{ profile.profile.reputation }}</h2>
+{% if profile.profile.is_banned %}
+<h3 class="ban-info">Пользователь заблокирован.</h3>
+<h3 class="ban-info">Причина бана: {{ profile.profile.ban_reason }}</h3>
+<h3 class="ban-info">Дата разбана: {{ profile.profile.ban_expiration_time }}</h3>
+{% endif %}
+</div>
+
+{% block content %}
+{% if user.is_staff and not profile.profile.is_banned %}
+
+<form action="{% url 'block_user' profile.id %}" method="POST">
+  {% csrf_token %}
+  <button class="red-button" type="submit">Заблокировать</button>
+</form>
+
+{% endif %}
+
+{% if user.is_staff and profile.profile.is_banned %}
+
+<form action="{% url 'unban_user' profile.id %}" method="POST">
+  {% csrf_token %}
+  <button class="blue-button" type="submit">Разблокировать</button>
+</form>
+
+{% endif %}
+
+{% if user.is_authenticated and user.username == profile.username %}
+<a href="{% url 'logout' %}"><button class="red-button">Выйти</button></a>
+{% endif %}
+{% endblock %}
 <style>
     h1{color:white;}
+.red-button {
+  background-color: #bd2c00;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.red-button:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.blue-button {
+  background-color: #2c82bd;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.blue-button:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.ban-info{
+background-color: red;
+color:white;
+margin-bottom: -26px;
+margin-left: 10px;
+}
+.user-info{
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+}
+h2{
+color:white;
+margin-bottom: -10px;
+margin-left: 10px;
+}
 </style>

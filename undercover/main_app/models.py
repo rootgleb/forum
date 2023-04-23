@@ -43,7 +43,7 @@ class Comments(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(max_length=500, blank=True)
     reputation = models.IntegerField(default=0)
     profile_image = models.ImageField()

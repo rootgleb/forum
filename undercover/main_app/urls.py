@@ -12,5 +12,7 @@ urlpatterns = [
     path('categories/<int:category_id>/', views.category_posts, name="category_posts"),
     path('category/<int:pk>/', views.category, name='category'),
     path('rules/', views.rules, name='rules'),
+    path('block_user/<int:user_id>/', views.block_user, name='block_user'),
+    path('unban_user/<int:user_id>/', views.unban_user, name='unban_user'),
 
 ]

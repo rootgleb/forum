@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from .forms import BanForm
+from .models import Profile
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile
 from .forms import PostForm, CommentForm
@@ -63,7 +66,7 @@ def topic(request, pk):
 
 def profile(request, user_id):
     user = User.objects.get(id=user_id)
-    return render(request, 'profile.html', {'profile': user})
+    return render(request, 'profile.html', {'profile': user, 'user_id': user.id})
 
 
 def add_post(request):
@@ -107,4 +110,40 @@ def category_view(request, category_id):
 def rules(request):
     return render(request, 'rules.html')
 
+@login_required
+def block_user(request, user_id):
+    profile = get_object_or_404(Profile, pk=user_id)
 
+    if request.method == 'POST':
+        form = BanForm(request.POST)
+        if form.is_valid() and request.user.is_staff:
+            days = form.cleaned_data['days']
+            reason = form.cleaned_data['reason']
+            profile.ban(days, reason)
+            messages.success(request, f'{profile.user.username} заблокирован на {days} дня.')
+            return redirect('profile', user_id=profile.user.id)
+        if form.is_valid() and not request.user.is_staff:
+            return render(request, "for_hacker.html")
+    else:
+        form = BanForm()
+
+    context = {
+        'profile': profile,
+        'form': form,
+    }
+    return render(request, 'block_user.html', context)
+
+@login_required
+def unban_user(request, user_id):
+    if request.user.is_staff:
+        profile = get_object_or_404(Profile, pk=user_id)
+        if not profile.is_banned:
+            messages.error(request, 'This user is not banned.')
+            return redirect('profile', user_id=profile.user.id)
+        else:
+            profile.is_banned = False
+            profile.save()
+            messages.success(request, 'User has been unbanned.')
+            return redirect('profile', user_id=profile.user.id)
+    else:
+        return render(request, "for_hacker.html")

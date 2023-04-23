@@ -3,8 +3,7 @@
   <form action="/"><button class="ui inverted orange basic button">Главная</button></form>
   <a href="{% url 'add' %}"><button class="ui inverted yellow basic button">Создать тему</button></a>
   <a href="{% url 'categories' %}"><button class="ui inverted teal basic button">Открыть раздел</button></a>
-  <button class="ui inverted violet basic button">Правила форума</button>
-  <button class="ui inverted blue basic button">Прочее</button>
+  <a href="{% url 'rules' %}"><button class="ui inverted violet basic button">Правила форума</button></a>
   {% if user.is_authenticated %}
   <a href="{% url 'profile' user.id %}"><button class="ui inverted green basic button">{{ user.get_username }}</button></a>
   {% endif %}

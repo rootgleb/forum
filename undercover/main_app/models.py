@@ -1,10 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
-from django.contrib.auth.signals import user_logged_in
-from ckeditor.widgets import CKEditorWidget
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 class Category(MPTTModel):
@@ -17,6 +16,7 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(
@@ -27,10 +27,12 @@ class Post(models.Model):
     body = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     url = models.TextField()
+
     def __str__(self):
         return self.title
+
     def __str__(self):
-        return self.user.username
+        return self.author.username
 
 
 class Comments(models.Model):
@@ -45,7 +47,15 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     reputation = models.IntegerField(default=0)
     profile_image = models.ImageField()
+    is_banned = models.BooleanField(default=False)
+    ban_expiration_time = models.DateTimeField(null=True, blank=True)
+    ban_reason = models.TextField(null=True, blank=True)
 
+    def ban(self, days, reason):
+        self.is_banned = True
+        self.ban_expiration_time = timezone.now() + timezone.timedelta(days=days)
+        self.ban_reason = reason
+        self.save()
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -2,10 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib import messages
+from .models import Profile
 from .forms import PostForm, CommentForm
 from .models import Post, Category
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
+
 
 def category_page(request):
     categories = Category.objects.filter(parent=None)
@@ -64,13 +67,20 @@ def profile(request, user_id):
 
 
 def add_post(request):
+    user = request.user
     if request.method == 'POST':
+        user = request.user
         form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('topic', pk=post.pk)
+
+        if form.is_valid() and user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+            if not profile.is_banned:
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect('topic', pk=post.pk)
+            else:
+                return redirect(request, 'home')
     else:
         form = PostForm()
     return render(request, 'post_form.html', {'form': form})
@@ -93,5 +103,8 @@ def category_view(request, category_id):
     }
     return render(request, 'category.html', context)
 
+
+def rules(request):
+    return render(request, 'rules.html')
 
 

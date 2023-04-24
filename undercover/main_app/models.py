@@ -51,9 +51,9 @@ class Profile(models.Model):
     ban_expiration_time = models.DateTimeField(null=True, blank=True)
     ban_reason = models.TextField(null=True, blank=True)
 
-    def ban(self, days, reason):
+    def ban(self, years, months, days, hours, minutes, reason):
         self.is_banned = True
-        self.ban_expiration_time = timezone.now() + timezone.timedelta(days=days)
+        self.ban_expiration_time = timezone.now() + timezone.timedelta(days=days + years * 365 + months * 30, hours=hours, minutes=minutes)
         self.ban_reason = reason
         self.save()
 

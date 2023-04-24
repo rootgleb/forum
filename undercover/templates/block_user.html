@@ -4,10 +4,21 @@
   <form method="POST">
     {% csrf_token %}
     <div id="div">
-      <h2>Время бана (в днях): </h2>
+      <h2>Время (года): </h2>
+      {{ form.years }}
+      <h2>Время (месяц):</h2>
+      {{ form.months }}
+      <h2>Время (дней):</h2>
       {{ form.days }}
+      <h2>Время (часов):</h2>
+      {{ form.hours }}
+      <h2>Время (минут):</h2>
+      {{ form.minutes }}
       <h2>Причина бана:</h2>
       {{ form.reason }}
+
+
+
       <button type="submit" class="red-button">Заблокировать</button>
     </div>
   </form>

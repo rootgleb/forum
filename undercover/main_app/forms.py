@@ -27,7 +27,12 @@ class CommentForm(forms.ModelForm):
 
 
 class BanForm(forms.Form):
-    days = forms.IntegerField(min_value=1, label='')
-    reason = forms.CharField(max_length=500, label='', widget=forms.Textarea(attrs={'rows': 4}))
+
+    days = forms.IntegerField(min_value=0, label='', initial=0, required=True)
+    months = forms.IntegerField(min_value=0, label='', initial=0, required=True)
+    years = forms.IntegerField(min_value=0, label='', initial=0, required=True)
+    hours = forms.IntegerField(min_value=0, label='', initial=0, required=True)
+    minutes = forms.IntegerField(min_value=0, label='', initial=0, required=True)
+    reason = forms.CharField(max_length=500, label='', widget=forms.Textarea(attrs={'rows': 2}))
 
 

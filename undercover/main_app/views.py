@@ -118,8 +118,12 @@ def block_user(request, user_id):
         form = BanForm(request.POST)
         if form.is_valid() and request.user.is_staff:
             days = form.cleaned_data['days']
+            months = form.cleaned_data['months']
+            hours = form.cleaned_data['hours']
+            years = form.cleaned_data['years']
+            minutes = form.cleaned_data['minutes']
             reason = form.cleaned_data['reason']
-            profile.ban(days, reason)
+            profile.ban(reason=reason, minutes=minutes, hours=hours, days=days, months=months, years=years)
             messages.success(request, f'{profile.user.username} заблокирован на {days} дня.')
             return redirect('profile', user_id=profile.user.id)
         if form.is_valid() and not request.user.is_staff:
